@@ -26,6 +26,7 @@
                 <div class="mt-2">
                     <x-input-label for="image" :value="__('Image')" />
                     <input id="image" class="block mt-1" type="file" name="image" />
+                    <x-input-error :messages="$errors->get('image')" class="mt-2" />
                 </div>
 
                 

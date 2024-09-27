@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6 mx-auto mt-3">
             
-            <form method="POST" action="{{ route('category.update',$category->id) }}">
+            <form method="POST" action="{{ route('category.update',$category->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('put')
 
@@ -24,7 +24,15 @@
                     <x-input-error :messages="$errors->get('is_active')" class="mt-2" />
                 </div>
 
-                <p>{{$category->user->id}}</p>
+                <div class="mt-2 flex align-items-center justify-content-between">
+                    @if($category->image)
+                        <img src="{{ asset($category->image) }}" class="w-20" alt="image">
+                    @else
+                         {{ "" }}
+                    @endif
+                    <x-input-label for="image" :value="__('Change Image :')" />
+                    <input id="image" class="block mt-1" type="file" name="image" />
+                </div>
 
                 <div class="flex items-center justify-end mt-4">
                     <x-primary-button class="ms-4">

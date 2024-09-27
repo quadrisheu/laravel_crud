@@ -8,8 +8,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 mb-3">
-                    {{ __("You're welcome " ) .Auth::user()->name.__(" . Here are your Categories below: " )}}
+                <div class="p-6 text-lg text-gray-900 mb-3">
+                {!! __("You're welcome ") . "<span class='font-extrabold text-xl'>" . Auth::user()->name . "</span>" . __(". Here are your Categories below: ") !!}
+                
                 </div>
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 

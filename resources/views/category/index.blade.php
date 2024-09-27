@@ -1,6 +1,10 @@
 <x-app-layout>
     <div class="row">
         <div class="col-md-6 mx-auto mt-3">
+            @if (session('message'))
+                <div class="alert alert-success" id="success-message">{{ session('message') }}</div>
+            @endif
+
             <table class="table table-striped table-border">
                     <thead>
                     <tr>
@@ -19,7 +23,11 @@
                                     <td>{{ $category->description }}</td>
                                     <td>{{ $category->is_active ? 'Yes' : 'No'}}</td>
                                     <td>
-                                        <img src="{{ asset($category->image) }}" class="w-20" alt="image" >
+                                        @if($category->image)
+                                            <img src="{{ asset($category->image) }}" class="w-20" alt="image">
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('category.show', $category->id) }}" class="btn btn-icon"
@@ -53,4 +61,12 @@
                 {{$categories->links()}}
         </div>
     </div>
+    <script>
+        setTimeout(function() {
+            let successMessage = document.getElementById('success-message');
+            if (successMessage) {
+                successMessage.style.display = 'none';
+            }
+        }, 10000);
+    </script>
 </x-app-layout>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="row">
         <div class="col-md-6 mx-auto mt-3">
-            <h2>Category Details</h2>
+            <h2 class="text-lg">Category Details</h2>
 
             <table class="table table-bordered">
                 <tr>
@@ -15,6 +15,16 @@
                 <tr>
                     <th>Is Active</th>
                     <td>{{ $category->is_active ? 'Yes' : 'No' }}</td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <td>
+                        @if($category->image)
+                            <img src="{{ asset($category->image) }}" class="w-20" alt="image">
+                        @else
+                            N/A
+                        @endif
+                    </td>
                 </tr>
             </table>
 

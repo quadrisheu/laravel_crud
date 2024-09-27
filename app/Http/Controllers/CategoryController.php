@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
@@ -22,24 +23,25 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255|unique:categories,name',
             'description' => 'required|string|max:255',
             'is_active'  => 'sometimes',
-            'image' => 'nullable|mimes:png,jpg,jpeg,webp',
+            'image' => 'nullable|mimes:png,jpg,jpeg,webp,svg,',
 
         ]);
-        
+
+        $category = new Category();
         if($request->has('image')){
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time().'.'.$extension;
             $path = 'uploads/category/';
 
-            $file->move($path,$filename); 
+            $file->move($path,$filename);
+            $category->image = $path . $filename;
         }
 
-        $category = new Category();
+        
         $category->name = $request->name;
         $category->description = $request->description;
         $category->is_active = $request->has('is_active');
-        $category->image = $path . $filename;
         $category->user_id = Auth::id(); 
         $category->save();
 
@@ -64,12 +66,29 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,'.$category->id,
             'description' => 'required|string|max:255',
             'is_active'  => 'sometimes',
+            'image' => 'nullable|mimes:png,jpg,jpeg,webp,svg,',
         ]);
+
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extension;
+            $path = 'uploads/category/';
+
+            $file->move($path,$filename); 
+
+            if(File::exists($category->image)){
+                File::delete($category->image);
+            }
+
+            $category->image = $path . $filename; 
+        }
         
-        $category = Category::findorfail($id);
+        //$category = Category::findorfail($id);
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->is_active = $request->has('is_active'); 
+        $category->is_active = $request->has('is_active');
+       
         $category->save();
 
         return redirect()->route('category.index')->with('message','Category successfully edited'); 
@@ -88,6 +107,9 @@ class CategoryController extends Controller
         if($category->user->isNot(Auth::user())){
             $message = 'You are not authorized to delete this category since you did not create it';
            return view('errors.403',compact('message'));
+        }
+        if(File::exists($category->image)){
+            File::delete($category->image);
         }
         $category->delete();
         return redirect()->route('category.index')->with('message','Category successfully deleted');
