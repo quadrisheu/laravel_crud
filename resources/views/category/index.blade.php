@@ -67,6 +67,6 @@
             if (successMessage) {
                 successMessage.style.display = 'none';
             }
-        }, 10000);
+        }, 5000);
     </script>
 </x-app-layout>

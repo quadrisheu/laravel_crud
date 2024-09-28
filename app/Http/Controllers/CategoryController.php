@@ -35,6 +35,7 @@ class CategoryController extends Controller
             $path = 'uploads/category/';
 
             $file->move($path,$filename);
+            
             $category->image = $path . $filename;
         }
 
